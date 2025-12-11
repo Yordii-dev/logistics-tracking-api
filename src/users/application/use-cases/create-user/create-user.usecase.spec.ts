@@ -1,16 +1,19 @@
+import { Role } from '@users/domain/entities/role';
 import { CreateUserUseCase } from './create-user.usecase';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User, UserRole } from '@users/domain/entities/user';
+import { IRoleRepository } from '@users/domain/repositories/role.repository';
 import { IUserRepository } from '@users/domain/repositories/user.repository';
 import { IPasswordHasher } from '@users/domain/services/password-hasher.service';
 
 describe('CreateUserUseCase', () => {
   let userUseCase: CreateUserUseCase;
-  let mockRepository: jest.Mocked<IUserRepository>;
+  let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockRoleRepository: jest.Mocked<IRoleRepository>;
   let mockHasher: jest.Mocked<IPasswordHasher>;
 
   beforeEach(() => {
-    mockRepository = {
+    mockUserRepository = {
       findByEmail: jest.fn(),
       save: jest.fn(),
     } as any;
@@ -19,7 +22,15 @@ describe('CreateUserUseCase', () => {
       hash: jest.fn(),
     } as any;
 
-    userUseCase = new CreateUserUseCase(mockRepository, mockHasher);
+    mockRoleRepository = {
+      findByName: jest.fn(),
+    } as any;
+
+    userUseCase = new CreateUserUseCase(
+      mockUserRepository,
+      mockHasher,
+      mockRoleRepository,
+    );
   });
 
   it('should be a class', async () => {
@@ -31,44 +42,53 @@ describe('CreateUserUseCase', () => {
   });
 
   it('should create a user when email does not exist', async () => {
-    mockRepository.findByEmail.mockResolvedValue(null);
+    mockUserRepository.findByEmail.mockResolvedValue(null);
+    mockRoleRepository.findByName.mockResolvedValue(
+      new Role('uuid_12345', UserRole.USER),
+    );
     mockHasher.hash.mockResolvedValue('hashed_password');
 
-    mockRepository.save.mockResolvedValue({
-      id: '123',
-      name: 'Elvin',
-      email: 'elvin@gmail.com',
-      passwordHash: 'hashed_password',
-      role: UserRole.USER,
-    } as User);
+    mockUserRepository.save.mockResolvedValue(
+      new User(
+        '123',
+        'Elvin',
+        'elvin@gmail.com',
+        'hashed_password',
+        'uuid_12345',
+      ),
+    );
 
     const dto: CreateUserDto = {
       name: 'Elvin',
       email: 'elvin@gmail.com',
       password: '123',
+      role_id: 'uuid_12345',
     };
     const result = await userUseCase.execute(dto);
     expect(result).toEqual({
       id: '123',
       name: 'Elvin',
       email: 'elvin@gmail.com',
-      role: UserRole.USER,
+      role_id: 'uuid_12345',
     });
   });
 
   it('should throw error if email exist', async () => {
-    mockRepository.findByEmail.mockResolvedValue({
-      id: '123',
-      name: 'Elvin',
-      email: 'elvin@gmail.com',
-      passwordHash: 'hashed_password',
-      role: UserRole.USER,
-    });
+    mockUserRepository.findByEmail.mockResolvedValue(
+      new User(
+        '123',
+        'Elvin',
+        'elvin@gmail.com',
+        'hashed_password',
+        'uuid_12345',
+      ),
+    );
 
     const dto: CreateUserDto = {
       name: 'Elvin',
       email: 'elvin@gmail.com',
       password: '123',
+      role_id: 'uuid_12345',
     };
 
     await expect(userUseCase.execute(dto)).rejects.toThrow(

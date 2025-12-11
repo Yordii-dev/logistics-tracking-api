@@ -1,6 +1,6 @@
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
+  ADMIN = 'Administrador',
+  USER = 'Usuario',
 }
 
 export class User {
@@ -9,6 +9,7 @@ export class User {
     public name: string,
     public email: string,
     public passwordHash: string,
-    public role: UserRole = UserRole.USER,
+    public roleId: string,
+    public createdAt?: Date,
   ) {}
 }

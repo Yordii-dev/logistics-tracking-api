@@ -5,6 +5,20 @@ generator client {
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model UserRole {
+  id   String @id @default(uuid())
+  name String @unique(map: "name") @db.VarChar(150)
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt
+
+  users User[]
+
+  @@map("user_roles")
 }
 
 model User {
@@ -12,18 +26,20 @@ model User {
   name         String
   email        String @unique
   passwordHash String
-  role         String
+  role_id      String
 
   status    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  role UserRole @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_role_id")
 
   @@map("users")
 }
 
 model PackageStatus {
   id   String @id @default(uuid())
-  name String
+  name String @unique(map: "name") @db.VarChar(150)
 
   status     Boolean  @default(true)
   created_at DateTime @default(now()) @db.Timestamp(0)

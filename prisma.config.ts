@@ -1,12 +1,14 @@
-import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from '@prisma/config';
+import path from 'path';
+
+const isProd = process.env.NODE_ENV === 'production';
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: path.join('prisma', 'schema.prisma'),
   migrations: {
-    path: 'prisma/migrations',
-  },
-  datasource: {
-    url: env('DATABASE_URL'),
+    path: path.join('prisma', 'migrations'),
+    seed: isProd
+      ? 'node dist/shared/infrastructure/persistence/prisma/seed/seed.js'
+      : 'ts-node --compiler-options {"module":"CommonJS"} src/shared/infrastructure/persistence/prisma/seed/seed.ts',
   },
 });
