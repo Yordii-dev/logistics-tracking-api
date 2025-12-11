@@ -1,7 +1,7 @@
 import { Role } from '@users/domain/entities/role';
 import { CreateUserUseCase } from './create-user.usecase';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { User, UserRole } from '@users/domain/entities/user';
+import { User, UserRoleEnum } from '@users/domain/entities/user';
 import { IRoleRepository } from '@users/domain/repositories/role.repository';
 import { IUserRepository } from '@users/domain/repositories/user.repository';
 import { IPasswordHasher } from '@users/domain/services/password-hasher.service';
@@ -44,7 +44,7 @@ describe('CreateUserUseCase', () => {
   it('should create a user when email does not exist', async () => {
     mockUserRepository.findByEmail.mockResolvedValue(null);
     mockRoleRepository.findByName.mockResolvedValue(
-      new Role('uuid_12345', UserRole.USER),
+      new Role('uuid_12345', UserRoleEnum.USER),
     );
     mockHasher.hash.mockResolvedValue('hashed_password');
 

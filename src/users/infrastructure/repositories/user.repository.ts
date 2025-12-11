@@ -46,7 +46,7 @@ export class UserRepository implements IUserRepository {
       user.name,
       user.email,
       user.passwordHash,
-      user.role.name,
+      user.role_id,
     );
   }
 

@@ -1,98 +1,148 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Logistics Tracking API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API para gestión de **usuarios** y **paquetes**, desarrollada con **NestJS**, arquitectura limpia, Prisma ORM y MySQL como base de datos.  
+El entorno local se levanta utilizando **Docker Compose** para la base de datos
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Requerimientos funcionales
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js + NestJS
+- Prisma ORM
+- MySQL
+- Docker
+- Clean Architecture (Domain, Application, Infrastructure)
+- Pnpm como gestor de paquetes (Mas rapido)
 
-## Project setup
+---
 
-```bash
-$ pnpm install
+# HU entregadas (MVP)
+
+### 1. Registrar usuario
+**HU:** Como usuario necesito registrarme para poder gestionar mis envíos.  
+**Estado:** ✔️ Completado  
+**Endpoint:** `POST /users`
+
+### 2. Consultar usuario por ID
+**HU:** Como usuario necesito consultar mi información.  
+**Estado:** ✔️ Completado  
+**Endpoint:** `GET /users/:id`
+
+### 3. Registrar un paquete
+**HU:** Como usuario necesito registrar un paquete con origen, destino y estado.  
+**Estado:** ✔️ Completado  
+**Endpoint:** `POST /packages`
+
+### 4. Listar paquetes por usuario
+**HU:** Como usuario necesito ver mis paquetes registrados.  
+**Estado:** ✔️ Completado  
+**Endpoint:** `GET /packages/:userId`
+
+---
+
+## Criterios de priorización (MVP)
+
+1. **Usuarios** (ya que sin usuarios no hay paquetes)  
+2. **Registro de paquetes**  
+3. **Consulta de paquetes por usuario**
+
+Se priorizó **flujo mínimo funcional** para demostrar trazabilidad básica del sistema.
+
+---
+
+## Instalación del proyecto
+
+### Clonacion del repositorio
+
+```sh
+git 
+cd logistics-tracking-api
 ```
 
-## Compile and run the project
+### Instalacion de dependencias
 
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+```sh
+npm install
 ```
 
-## Run tests
+### Levantar MySQL con Docker
 
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+```sh
+docker compose up -d
 ```
 
-## Deployment
+### Ejecutar migraciones de Prisma
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+```sh
+pnpm prisma migrate dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Levantar servidor
 
-## Resources
+```sh
+pnpm start:dev
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### La API escuhara en:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```sh
+http://localhost:3000
+```
 
-## Support
+## Usos de la API
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Usuarios
 
-## Stay in touch
+#### Crear usuarios
+POST /users
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```sh
+{
+    "name": "Jhenifer",
+    "email": "Jhenifer@gmail.com",
+    "password": "12345"
+}
 
-## License
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+#### Obtener usuario
+GET /users/:id
+
+```sh
+http://localhost:3000/users/d6553513-ce8b-4cbc-bd90-fd1ba7fb5126
+
+```
+
+### Paquetes
+
+#### Crear paquetes
+POST /packages
+
+```sh
+{
+    "ownerId": "d6553513-ce8b-4cbc-bd90-fd1ba7fb5126",
+    "origin": "Trujillo",
+    "destination": "Piura"
+}
+
+```
+
+#### Obtener paquetes
+GET /packages/:userId
+
+```sh
+http://localhost:3000/packages/d6553513-ce8b-4cbc-bd90-fd1ba7fb5126
+```
+
+
+## Mejoras futuras
+
+Agregar autenticacion JWT
+
+Endpoints de seguimiento de paquetes
+
+Integrar base NoSQL para los logs y tracking
+
+Dockerfile para empaquetar la API
+
+Swagger para documentación automática de los endopoints

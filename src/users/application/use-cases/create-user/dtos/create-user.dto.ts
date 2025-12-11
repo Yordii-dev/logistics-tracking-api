@@ -5,10 +5,10 @@ export class CreateUserDto {
   role_id?: string;
 }
 
-export class UserResponseDto {
+export class CreateUserResponseDto {
   id: string;
   name: string;
   email: string;
   role_id: string;
-  createdAt?: Date;
+  created_at?: Date;
 }
