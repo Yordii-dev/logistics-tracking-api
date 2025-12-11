@@ -62,7 +62,7 @@ cd logistics-tracking-api
 ### Instalacion de dependencias
 
 ```sh
-npm install
+pnpm install
 ```
 
 ### Levantar MySQL con Docker
