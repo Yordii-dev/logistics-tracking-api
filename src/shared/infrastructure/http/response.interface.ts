@@ -1,0 +1,9 @@
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  errors?: string[];
+  metadata?: {
+    timestamp: string;
+  };
+}
