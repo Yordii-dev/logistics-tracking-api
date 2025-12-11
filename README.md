@@ -74,7 +74,7 @@ docker compose up -d
 ### Ejecutar migraciones de Prisma
 
 ```sh
-pnpm prisma migrate dev
+pnpm prisma:migrate:all
 ```
 
 ### Levantar servidor
