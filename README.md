@@ -55,7 +55,7 @@ Se priorizó **flujo mínimo funcional** para demostrar trazabilidad básica del
 ### Clonacion del repositorio
 
 ```sh
-git 
+git clone https://github.com/Yordii-dev/logistics-tracking-api.git
 cd logistics-tracking-api
 ```
 
